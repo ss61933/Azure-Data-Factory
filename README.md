@@ -3,7 +3,9 @@
 Notes folder 
 1. Course Summary
 
+
 2. Setup Azure environment practical
+
 	Step1 Create Resource Group
 	Step2 Create Storage Account
 	Step3 Create storage containers
@@ -13,6 +15,7 @@ Notes folder
 	Step7 Creating ADF - Azure data factory
 
 3. Azure data factory (ADF) practical
+
    Step1 Creating Linked Services
    Step2 Creating dataset
    Step3 Create a copy pipeline
