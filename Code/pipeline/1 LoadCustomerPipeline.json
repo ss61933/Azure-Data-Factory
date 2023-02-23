@@ -1,5 +1,5 @@
 {
-	"name": "LoadCustomerPipeline",
+	"name": "1 LoadCustomerPipeline",
 	"properties": {
 		"activities": [
 			{
@@ -42,9 +42,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
-									"name": "CustomerID",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 1
 								}
 							},
 							{
@@ -54,9 +54,9 @@
 									"physicalType": "bit"
 								},
 								"sink": {
-									"name": "NameStyle",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 2
 								}
 							},
 							{
@@ -66,9 +66,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "Title",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 3
 								}
 							},
 							{
@@ -78,9 +78,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "FirstName",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 4
 								}
 							},
 							{
@@ -90,9 +90,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "MiddleName",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 5
 								}
 							},
 							{
@@ -102,9 +102,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "LastName",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 6
 								}
 							},
 							{
@@ -114,9 +114,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "Suffix",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 7
 								}
 							},
 							{
@@ -126,9 +126,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "CompanyName",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 8
 								}
 							},
 							{
@@ -138,9 +138,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "SalesPerson",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 9
 								}
 							},
 							{
@@ -150,9 +150,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "EmailAddress",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 10
 								}
 							},
 							{
@@ -162,9 +162,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
-									"name": "Phone",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 11
 								}
 							},
 							{
@@ -174,9 +174,9 @@
 									"physicalType": "varchar"
 								},
 								"sink": {
-									"name": "PasswordHash",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 12
 								}
 							},
 							{
@@ -186,9 +186,9 @@
 									"physicalType": "varchar"
 								},
 								"sink": {
-									"name": "PasswordSalt",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 13
 								}
 							},
 							{
@@ -198,9 +198,9 @@
 									"physicalType": "uniqueidentifier"
 								},
 								"sink": {
-									"name": "rowguid",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 14
 								}
 							},
 							{
@@ -210,9 +210,9 @@
 									"physicalType": "datetime"
 								},
 								"sink": {
-									"name": "ModifiedDate",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "String",
+									"ordinal": 15
 								}
 							}
 						],
@@ -231,7 +231,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "op_CustomerFile",
+						"referenceName": "op_adl_devempfolder",
 						"type": "DatasetReference"
 					}
 				]
