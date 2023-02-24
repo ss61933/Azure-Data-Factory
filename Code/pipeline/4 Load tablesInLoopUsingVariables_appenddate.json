@@ -1,0 +1,96 @@
+{
+	"name": "4 Load tablesInLoopUsingVariables_appenddate",
+	"properties": {
+		"description": "Mention table list in variable .\nRead \nSalesLT].[Product];\n[SalesLT].[ProductCategory];",
+		"activities": [
+			{
+				"name": "ForEachTableName",
+				"description": "Read list of tables from variable - V_table_list",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('V_table_list')",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data for each table",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "@item()",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ip_exploredb_generic",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "op_adl_generic",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_filename": {
+											"value": "@concat(\n        concat(\n            replace(item(),'select * from SalesLT.',' '),\n            '_'\n            )\n        , formatDateTime(utcNow(),'mm-dd-yyyy')\n)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"V_table_list": {
+				"type": "Array",
+				"defaultValue": [
+					"select * from SalesLT.PRODUCT",
+					"select * from SalesLT.PRODUCTCATEGORY"
+				]
+			}
+		},
+		"annotations": []
+	}
+}
