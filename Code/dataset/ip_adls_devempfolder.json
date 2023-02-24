@@ -5,6 +5,9 @@
 			"referenceName": "link_to_ADLS",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "InputDatasets"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
