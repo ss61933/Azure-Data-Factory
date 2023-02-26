@@ -740,6 +740,11 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"variables": {
+					"FileName": {
+						"type": "String"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1149,24 +1154,44 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Get Files list').output.itemName",
+								"value": "@activity('Get Files list').output.childItems",
 								"type": "Expression"
 							},
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "If Condition1",
-									"type": "IfCondition",
+									"name": "Set variable1",
+									"type": "SetVariable",
 									"dependsOn": [],
 									"userProperties": [],
 									"typeProperties": {
+										"variableName": "FileName",
+										"value": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "Set variable1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
 										"expression": {
-											"value": "@item().itemName=='countries'",
+											"value": "@item().name ='countries'",
 											"type": "Expression"
 										},
 										"ifTrueActivities": [
 											{
-												"name": "Copy data1",
+												"name": "Copy countries",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {
@@ -1182,10 +1207,10 @@
 														"type": "DelimitedTextSource",
 														"storeSettings": {
 															"type": "AzureBlobFSReadSettings",
-															"recursive": false,
+															"recursive": true,
 															"wildcardFolderPath": "devemp",
 															"wildcardFileName": {
-																"value": "@activity('Get Files list').output.itemName",
+																"value": "@variables('FileName')",
 																"type": "Expression"
 															},
 															"enablePartitionDiscovery": false
@@ -1240,6 +1265,11 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"variables": {
+					"FileName": {
+						"type": "String"
+					}
 				},
 				"annotations": []
 			},
@@ -1324,6 +1354,11 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"variables": {
+					"FileName": {
+						"type": "String"
+					}
 				},
 				"annotations": []
 			},
@@ -1419,6 +1454,11 @@
 					"P_case": {
 						"type": "string",
 						"defaultValue": "Delete"
+					}
+				},
+				"variables": {
+					"FileName": {
+						"type": "String"
 					}
 				},
 				"annotations": []
