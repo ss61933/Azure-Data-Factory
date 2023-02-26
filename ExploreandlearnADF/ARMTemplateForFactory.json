@@ -472,7 +472,7 @@
 							},
 							"ifTrueActivities": [
 								{
-									"name": "Execute Pipeline1",
+									"name": "Call2LoadFilesInLoop",
 									"type": "ExecutePipeline",
 									"dependsOn": [],
 									"userProperties": [],
@@ -721,7 +721,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Switch- Copy Delete",
+						"name": "SwitchCopyDelete",
 						"type": "Switch",
 						"dependsOn": [],
 						"userProperties": [],
@@ -735,7 +735,7 @@
 									"value": "Copy",
 									"activities": [
 										{
-											"name": "Execute Pipeline COpy ",
+											"name": "ExecutePipelineCopy",
 											"type": "ExecutePipeline",
 											"dependsOn": [],
 											"userProperties": [],
