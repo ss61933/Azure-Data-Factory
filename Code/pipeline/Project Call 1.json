@@ -46,7 +46,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@activity('GetListOfFiles').output.childItems=''",
+						"value": "@activity('GetListOfFiles').output.childItems",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
@@ -67,6 +67,11 @@
 				}
 			}
 		],
+		"variables": {
+			"FileName": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
