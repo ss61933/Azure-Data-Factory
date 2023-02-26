@@ -77,7 +77,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@item().name ='countries'",
+									"value": "@equals(item().name ,'countries' )",
 									"type": "Expression"
 								},
 								"ifTrueActivities": [
