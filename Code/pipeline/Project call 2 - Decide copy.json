@@ -81,7 +81,7 @@
 													"recursive": true,
 													"wildcardFolderPath": "devemp",
 													"wildcardFileName": {
-														"value": "@variables('FileName')",
+														"value": "@pipeline().parameters.p_filename",
 														"type": "Expression"
 													},
 													"enablePartitionDiscovery": false
@@ -131,9 +131,9 @@
 				}
 			}
 		],
-		"variables": {
-			"FileName": {
-				"type": "String"
+		"parameters": {
+			"p_filename": {
+				"type": "string"
 			}
 		},
 		"annotations": []
