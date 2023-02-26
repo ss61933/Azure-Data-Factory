@@ -454,7 +454,7 @@
 						}
 					},
 					{
-						"name": "Check If file exists",
+						"name": "If Condition1",
 						"type": "IfCondition",
 						"dependsOn": [
 							{
@@ -467,18 +467,18 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@activity('GetListOfFiles').output.exists",
+								"value": "@activity('GetListOfFiles').output.childItems=''",
 								"type": "Expression"
 							},
 							"ifTrueActivities": [
 								{
-									"name": "Call2LoadFilesInLoop",
+									"name": "Decide Copy",
 									"type": "ExecutePipeline",
 									"dependsOn": [],
 									"userProperties": [],
 									"typeProperties": {
 										"pipeline": {
-											"referenceName": "Project Call 2 - Load Files in loop",
+											"referenceName": "Project call 2 - Decide copy",
 											"type": "PipelineReference"
 										},
 										"waitOnCompletion": true,
@@ -497,7 +497,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder')]",
-				"[concat(variables('factoryId'), '/pipelines/Project Call 2 - Load Files in loop')]"
+				"[concat(variables('factoryId'), '/pipelines/Project call 2 - Decide copy')]"
 			]
 		},
 		{
@@ -1277,6 +1277,155 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder')]",
 				"[concat(variables('factoryId'), '/datasets/ip_ADLS_Employeefile')]",
+				"[concat(variables('factoryId'), '/datasets/op_adl_devempfolder')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Project call 2 - Decide copy')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Files list",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ip_adls_devempfolder",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Files list",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Files list').output.itemName",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@item().itemName=='countries'",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "Copy data1",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "DelimitedTextSource",
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": false,
+															"wildcardFolderPath": "devemp",
+															"wildcardFileName": {
+																"value": "@activity('Get Files list').output.itemName",
+																"type": "Expression"
+															},
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "DelimitedTextReadSettings"
+														}
+													},
+													"sink": {
+														"type": "DelimitedTextSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextWriteSettings",
+															"quoteAllText": true,
+															"fileExtension": ".txt"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ip_adls_devempfolder",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "op_adl_devempfolder",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder')]",
 				"[concat(variables('factoryId'), '/datasets/op_adl_devempfolder')]"
 			]
 		}
