@@ -33,7 +33,7 @@
 				}
 			},
 			{
-				"name": "Check If file exists",
+				"name": "If Condition1",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -46,18 +46,18 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@activity('GetListOfFiles').output.exists",
+						"value": "@activity('GetListOfFiles').output.childItems=''",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
 						{
-							"name": "Call2LoadFilesInLoop",
+							"name": "Decide Copy",
 							"type": "ExecutePipeline",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "Project Call 2 - Load Files in loop",
+									"referenceName": "Project call 2 - Decide copy",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true
