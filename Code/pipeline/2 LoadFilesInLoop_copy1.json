@@ -51,7 +51,7 @@
 					},
 					"ifTrueActivities": [
 						{
-							"name": "Execute Pipeline1",
+							"name": "Call 2 LoadFilesInLoop",
 							"type": "ExecutePipeline",
 							"dependsOn": [],
 							"userProperties": [],
