@@ -77,7 +77,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@equals(item().name ,'countries' )",
+									"value": "@equals(variables('FileName') ,'countries' )",
 									"type": "Expression"
 								},
 								"ifTrueActivities": [
