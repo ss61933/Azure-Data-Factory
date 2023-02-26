@@ -23,7 +23,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"pipeline": {
-											"referenceName": "2 LoadFilesInLoop_copy1",
+											"referenceName": "Project Call 1",
 											"type": "PipelineReference"
 										},
 										"waitOnCompletion": true

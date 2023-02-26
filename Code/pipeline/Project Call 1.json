@@ -1,5 +1,5 @@
 {
-	"name": "2 LoadFilesInLoop_copy1",
+	"name": "Project Call 1",
 	"properties": {
 		"activities": [
 			{
@@ -57,7 +57,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "2 LoadFilesInLoop",
+									"referenceName": "Project Call 2 - Load Files in loop",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true
