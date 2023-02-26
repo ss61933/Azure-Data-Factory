@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "Project",
 	"properties": {
 		"activities": [
 			{
@@ -8,15 +8,34 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
+					"on": {
+						"value": "@pipeline().parameters.P_case",
+						"type": "Expression"
+					},
 					"cases": [
 						{
-							"value": "Copy"
+							"value": "Copy",
+							"activities": [
+								{
+									"name": "Execute Pipeline COpy ",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "2 LoadFilesInLoop_copy1",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true
+									}
+								}
+							]
 						},
 						{
 							"value": "Delete",
 							"activities": [
 								{
-									"name": "Delete Fiels",
+									"name": "Delete Files",
 									"description": "Delete all files from folder /deletefolder/",
 									"type": "Delete",
 									"dependsOn": [],
@@ -38,12 +57,12 @@
 												"referenceName": "link_to_ADLS",
 												"type": "LinkedServiceReference"
 											},
-											"path": "deletefolder"
+											"path": "logfolder"
 										},
 										"enableLogging": true,
 										"storeSettings": {
 											"type": "AzureBlobFSReadSettings",
-											"recursive": true,
+											"recursive": false,
 											"enablePartitionDiscovery": false
 										}
 									}
