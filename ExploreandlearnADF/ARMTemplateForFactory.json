@@ -472,7 +472,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@activity('GetListOfFiles').output.childItems=''",
+								"value": "@activity('GetListOfFiles').output.exists",
 								"type": "Expression"
 							},
 							"ifTrueActivities": [
