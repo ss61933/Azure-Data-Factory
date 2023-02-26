@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Switch- Copy Delete",
+				"name": "SwitchCopyDelete",
 				"type": "Switch",
 				"dependsOn": [],
 				"userProperties": [],
