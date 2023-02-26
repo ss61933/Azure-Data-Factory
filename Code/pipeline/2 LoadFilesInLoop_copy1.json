@@ -56,6 +56,10 @@
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
+								"pipeline": {
+									"referenceName": "2 LoadFilesInLoop",
+									"type": "PipelineReference"
+								},
 								"waitOnCompletion": true
 							}
 						}
