@@ -944,11 +944,6 @@
 														"storeSettings": {
 															"type": "AzureBlobFSReadSettings",
 															"recursive": true,
-															"wildcardFolderPath": "devemp",
-															"wildcardFileName": {
-																"value": "@pipeline().parameters.p_filename",
-																"type": "Expression"
-															},
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -978,7 +973,7 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ip_adls_devempfolder",
+														"referenceName": "ip_adls_countries",
 														"type": "DatasetReference",
 														"parameters": {}
 													}
@@ -1002,16 +997,12 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"parameters": {
-					"p_filename": {
-						"type": "string"
-					}
-				},
 				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder')]",
 				"[concat(variables('factoryId'), '/datasets/op_exploredb_locations')]",
+				"[concat(variables('factoryId'), '/datasets/ip_adls_countries')]",
 				"[concat(variables('factoryId'), '/datasets/op_adl_devempfolder')]"
 			]
 		},
@@ -1602,6 +1593,44 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_adls_countries')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "countries.csv",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "COUNTRY_ID",
+						"type": "String"
+					},
+					{
+						"name": "COUNTRY_NAME",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
 		}
 	]
 }
