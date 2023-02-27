@@ -712,6 +712,9 @@
 						"type": "String"
 					}
 				},
+				"folder": {
+					"name": "Project - Copy Upsert Delete file"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -997,6 +1000,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "Project - Copy Upsert Delete file"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1135,6 +1141,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "Project - Copy Upsert Delete file"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1231,6 +1240,9 @@
 						"type": "string",
 						"defaultValue": "Delete"
 					}
+				},
+				"folder": {
+					"name": "Project - Copy Upsert Delete file"
 				},
 				"annotations": []
 			},
