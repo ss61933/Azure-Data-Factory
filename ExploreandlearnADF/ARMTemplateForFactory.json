@@ -650,7 +650,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
-								"referenceName": "ip_adls_devempfolder",
+								"referenceName": "ip_adls_devempfolder_all",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -710,6 +710,9 @@
 				"variables": {
 					"FileName": {
 						"type": "String"
+					},
+					"V_VariableName": {
+						"type": "String"
 					}
 				},
 				"folder": {
@@ -718,7 +721,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder')]",
+				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder_all')]",
 				"[concat(variables('factoryId'), '/pipelines/Project Call 2 - Decide copy')]"
 			]
 		},
@@ -742,7 +745,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
-								"referenceName": "ip_adls_devempfolder",
+								"referenceName": "ip_adls_devempfolder_all",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -781,7 +784,14 @@
 								{
 									"name": "If Country else location",
 									"type": "IfCondition",
-									"dependsOn": [],
+									"dependsOn": [
+										{
+											"activity": "Set Filename",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
 									"userProperties": [],
 									"typeProperties": {
 										"expression": {
@@ -807,8 +817,6 @@
 														"storeSettings": {
 															"type": "AzureBlobFSReadSettings",
 															"recursive": true,
-															"wildcardFolderPath": "devemp",
-															"wildcardFileName": "locations.csv",
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -916,7 +924,12 @@
 													{
 														"referenceName": "ip_adls_devempfolder",
 														"type": "DatasetReference",
-														"parameters": {}
+														"parameters": {
+															"P_FileName": {
+																"value": "@variables('V_VariableName')",
+																"type": "Expression"
+															}
+														}
 													}
 												],
 												"outputs": [
@@ -976,9 +989,14 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ip_adls_countries",
+														"referenceName": "ip_adls_devempfolder",
 														"type": "DatasetReference",
-														"parameters": {}
+														"parameters": {
+															"P_FileName": {
+																"value": "@variables('V_VariableName')",
+																"type": "Expression"
+															}
+														}
 													}
 												],
 												"outputs": [
@@ -991,6 +1009,19 @@
 											}
 										]
 									}
+								},
+								{
+									"name": "Set Filename",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "V_VariableName",
+										"value": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
@@ -1000,15 +1031,20 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"variables": {
+					"V_VariableName": {
+						"type": "String"
+					}
+				},
 				"folder": {
 					"name": "Project - Copy Upsert Delete file"
 				},
 				"annotations": []
 			},
 			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder_all')]",
 				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder')]",
 				"[concat(variables('factoryId'), '/datasets/op_exploredb_locations')]",
-				"[concat(variables('factoryId'), '/datasets/ip_adls_countries')]",
 				"[concat(variables('factoryId'), '/datasets/op_adl_devempfolder')]"
 			]
 		},
@@ -1238,6 +1274,11 @@
 					"P_case": {
 						"type": "string",
 						"defaultValue": "Delete"
+					}
+				},
+				"variables": {
+					"V_VariableName": {
+						"type": "String"
 					}
 				},
 				"folder": {
@@ -1652,6 +1693,44 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_adls_devempfolder_all')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "InputDatasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
 		}
 	]
 }
