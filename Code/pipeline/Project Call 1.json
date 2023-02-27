@@ -57,7 +57,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "Project call 2 - Decide copy",
+									"referenceName": "Project Call 2 - Decide copy",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true
