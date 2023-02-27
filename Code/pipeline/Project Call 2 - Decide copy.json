@@ -52,7 +52,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "If Condition1",
+							"name": "If Country else location",
 							"type": "IfCondition",
 							"dependsOn": [],
 							"userProperties": [],
