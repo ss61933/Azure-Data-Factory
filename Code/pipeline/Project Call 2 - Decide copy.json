@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ip_adls_devempfolder",
+						"referenceName": "ip_adls_devempfolder_all",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
@@ -54,7 +54,14 @@
 						{
 							"name": "If Country else location",
 							"type": "IfCondition",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Set Filename",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
@@ -80,8 +87,6 @@
 												"storeSettings": {
 													"type": "AzureBlobFSReadSettings",
 													"recursive": true,
-													"wildcardFolderPath": "devemp",
-													"wildcardFileName": "locations.csv",
 													"enablePartitionDiscovery": false
 												},
 												"formatSettings": {
@@ -188,7 +193,13 @@
 										"inputs": [
 											{
 												"referenceName": "ip_adls_devempfolder",
-												"type": "DatasetReference"
+												"type": "DatasetReference",
+												"parameters": {
+													"P_FileName": {
+														"value": "@variables('V_VariableName')",
+														"type": "Expression"
+													}
+												}
 											}
 										],
 										"outputs": [
@@ -247,8 +258,14 @@
 										},
 										"inputs": [
 											{
-												"referenceName": "ip_adls_countries",
-												"type": "DatasetReference"
+												"referenceName": "ip_adls_devempfolder",
+												"type": "DatasetReference",
+												"parameters": {
+													"P_FileName": {
+														"value": "@variables('V_VariableName')",
+														"type": "Expression"
+													}
+												}
 											}
 										],
 										"outputs": [
@@ -260,11 +277,29 @@
 									}
 								]
 							}
+						},
+						{
+							"name": "Set Filename",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "V_VariableName",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
 			}
 		],
+		"variables": {
+			"V_VariableName": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "Project - Copy Upsert Delete file"
 		},

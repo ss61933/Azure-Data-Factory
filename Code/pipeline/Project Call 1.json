@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ip_adls_devempfolder",
+						"referenceName": "ip_adls_devempfolder_all",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
@@ -69,6 +69,9 @@
 		],
 		"variables": {
 			"FileName": {
+				"type": "String"
+			},
+			"V_VariableName": {
 				"type": "String"
 			}
 		},
