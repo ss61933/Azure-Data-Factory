@@ -270,11 +270,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"p_filename": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
