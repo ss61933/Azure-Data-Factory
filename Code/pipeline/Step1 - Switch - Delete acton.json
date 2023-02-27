@@ -1,5 +1,5 @@
 {
-	"name": "Project",
+	"name": "Step1 - Switch - Delete acton",
 	"properties": {
 		"activities": [
 			{
@@ -23,7 +23,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"pipeline": {
-											"referenceName": "Project Call 1",
+											"referenceName": "Step2 - Call Copy for all files",
 											"type": "PipelineReference"
 										},
 										"waitOnCompletion": true
@@ -77,6 +77,11 @@
 			"P_case": {
 				"type": "string",
 				"defaultValue": "Delete"
+			}
+		},
+		"variables": {
+			"V_VariableName": {
+				"type": "String"
 			}
 		},
 		"folder": {

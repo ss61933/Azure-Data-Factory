@@ -1,5 +1,5 @@
 {
-	"name": "Project Call 1",
+	"name": "Step2 - Call Copy for all files",
 	"properties": {
 		"activities": [
 			{
@@ -57,7 +57,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "Project Call 2 - Decide copy",
+									"referenceName": "Step3 - Copy or Upsert",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true
