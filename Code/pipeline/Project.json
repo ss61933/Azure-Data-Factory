@@ -79,6 +79,9 @@
 				"defaultValue": "Delete"
 			}
 		},
+		"folder": {
+			"name": "Project - Copy Upsert Delete file"
+		},
 		"annotations": []
 	}
 }
