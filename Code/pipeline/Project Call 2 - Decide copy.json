@@ -218,11 +218,6 @@
 												"storeSettings": {
 													"type": "AzureBlobFSReadSettings",
 													"recursive": true,
-													"wildcardFolderPath": "devemp",
-													"wildcardFileName": {
-														"value": "@activity('Get Files list').output.childItems",
-														"type": "Expression"
-													},
 													"enablePartitionDiscovery": false
 												},
 												"formatSettings": {
@@ -252,7 +247,7 @@
 										},
 										"inputs": [
 											{
-												"referenceName": "ip_adls_devempfolder",
+												"referenceName": "ip_adls_countries",
 												"type": "DatasetReference"
 											}
 										],
