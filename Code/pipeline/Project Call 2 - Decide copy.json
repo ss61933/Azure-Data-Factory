@@ -90,10 +90,11 @@
 												"type": "AzureSqlSink",
 												"writeBehavior": "upsert",
 												"upsertSettings": {
-													"useTempDB": true,
+													"useTempDB": false,
 													"keys": [
 														"LOCATION_ID"
-													]
+													],
+													"interimSchemaName": "dbo"
 												},
 												"sqlWriterUseTableLock": false,
 												"disableMetricsCollection": false
