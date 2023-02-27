@@ -5,6 +5,12 @@
 			"referenceName": "link_to_ADLS",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"P_FileName": {
+				"type": "string",
+				"defaultValue": "*"
+			}
+		},
 		"folder": {
 			"name": "InputDatasets"
 		},
@@ -13,6 +19,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().P_FileName",
+					"type": "Expression"
+				},
 				"folderPath": "devemp",
 				"fileSystem": "devlanding"
 			},

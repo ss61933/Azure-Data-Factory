@@ -69,11 +69,6 @@
 									"storeSettings": {
 										"type": "AzureBlobFSReadSettings",
 										"recursive": true,
-										"wildcardFolderPath": "devemp",
-										"wildcardFileName": {
-											"value": "@item().name",
-											"type": "Expression"
-										},
 										"enablePartitionDiscovery": false
 									},
 									"formatSettings": {
@@ -103,8 +98,14 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ip_ADLS_Employeefile",
-									"type": "DatasetReference"
+									"referenceName": "ip_adls_devempfolder",
+									"type": "DatasetReference",
+									"parameters": {
+										"P_FileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
