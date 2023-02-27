@@ -803,7 +803,9 @@
 														"type": "DelimitedTextSource",
 														"storeSettings": {
 															"type": "AzureBlobFSReadSettings",
-															"fileListPath": "devlanding/devemp/locations.csv",
+															"recursive": true,
+															"wildcardFolderPath": "devemp",
+															"wildcardFileName": "locations.csv",
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -814,10 +816,11 @@
 														"type": "AzureSqlSink",
 														"writeBehavior": "upsert",
 														"upsertSettings": {
-															"useTempDB": true,
+															"useTempDB": false,
 															"keys": [
 																"LOCATION_ID"
-															]
+															],
+															"interimSchemaName": "dbo"
 														},
 														"sqlWriterUseTableLock": false,
 														"disableMetricsCollection": false
@@ -825,6 +828,80 @@
 													"enableStaging": false,
 													"translator": {
 														"type": "TabularTranslator",
+														"mappings": [
+															{
+																"source": {
+																	"name": "LOCATION_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "LOCATION_ID",
+																	"type": "Int32",
+																	"physicalType": "int"
+																}
+															},
+															{
+																"source": {
+																	"name": "STREET_ADDRESS",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "STREET_ADDRESS",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "POSTAL_CODE",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "POSTAL_CODE",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "CITY",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "CITY",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "STATE_PROVINCE",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "STATE_PROVINCE",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "COUNTRY_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "COUNTRY_ID",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															}
+														],
 														"typeConversion": true,
 														"typeConversionSettings": {
 															"allowDataTruncation": true,
@@ -1248,6 +1325,7 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
