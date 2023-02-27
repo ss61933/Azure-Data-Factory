@@ -107,8 +107,9 @@
 												"mappings": [
 													{
 														"source": {
+															"name": "LOCATION_ID",
 															"type": "String",
-															"ordinal": 1
+															"physicalType": "String"
 														},
 														"sink": {
 															"name": "LOCATION_ID",
@@ -118,8 +119,9 @@
 													},
 													{
 														"source": {
+															"name": "STREET_ADDRESS",
 															"type": "String",
-															"ordinal": 2
+															"physicalType": "String"
 														},
 														"sink": {
 															"name": "STREET_ADDRESS",
@@ -129,8 +131,9 @@
 													},
 													{
 														"source": {
+															"name": "POSTAL_CODE",
 															"type": "String",
-															"ordinal": 3
+															"physicalType": "String"
 														},
 														"sink": {
 															"name": "POSTAL_CODE",
@@ -140,8 +143,9 @@
 													},
 													{
 														"source": {
+															"name": "CITY",
 															"type": "String",
-															"ordinal": 4
+															"physicalType": "String"
 														},
 														"sink": {
 															"name": "CITY",
@@ -151,8 +155,9 @@
 													},
 													{
 														"source": {
+															"name": "STATE_PROVINCE",
 															"type": "String",
-															"ordinal": 5
+															"physicalType": "String"
 														},
 														"sink": {
 															"name": "STATE_PROVINCE",
@@ -162,8 +167,9 @@
 													},
 													{
 														"source": {
+															"name": "COUNTRY_ID",
 															"type": "String",
-															"ordinal": 6
+															"physicalType": "String"
 														},
 														"sink": {
 															"name": "COUNTRY_ID",
