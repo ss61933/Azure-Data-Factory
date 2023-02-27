@@ -79,7 +79,9 @@
 												"type": "DelimitedTextSource",
 												"storeSettings": {
 													"type": "AzureBlobFSReadSettings",
-													"fileListPath": "devlanding/devemp/locations.csv",
+													"recursive": true,
+													"wildcardFolderPath": "devemp",
+													"wildcardFileName": "locations.csv",
 													"enablePartitionDiscovery": false
 												},
 												"formatSettings": {
