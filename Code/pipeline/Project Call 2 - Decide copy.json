@@ -218,11 +218,6 @@
 												"storeSettings": {
 													"type": "AzureBlobFSReadSettings",
 													"recursive": true,
-													"wildcardFolderPath": "devemp",
-													"wildcardFileName": {
-														"value": "@pipeline().parameters.p_filename",
-														"type": "Expression"
-													},
 													"enablePartitionDiscovery": false
 												},
 												"formatSettings": {
