@@ -71,7 +71,8 @@
 				"          LOCATION_ID,",
 				"          CITY,",
 				"          STATE_PROVINCE",
-				"     )) ~> TargetLocationdetails"
+				"     ),",
+				"     partitionBy('hash', 1)) ~> TargetLocationdetails"
 			]
 		}
 	}
