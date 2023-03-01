@@ -1728,6 +1728,258 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/1 Join Country Locations')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ip_dataflow_countries",
+								"type": "DatasetReference"
+							},
+							"name": "Countries"
+						},
+						{
+							"dataset": {
+								"referenceName": "ip_dataflow_locations",
+								"type": "DatasetReference"
+							},
+							"name": "Locations"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "op_dataflow_locationCountryDetails",
+								"type": "DatasetReference"
+							},
+							"name": "TargetLocationdetails"
+						}
+					],
+					"transformations": [
+						{
+							"name": "countrylocationjoin"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          COUNTRY_ID as string,",
+						"          COUNTRY_NAME as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Countries",
+						"source(output(",
+						"          LOCATION_ID as string,",
+						"          STREET_ADDRESS as string,",
+						"          POSTAL_CODE as string,",
+						"          CITY as string,",
+						"          STATE_PROVINCE as string,",
+						"          COUNTRY_ID as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Locations",
+						"Countries, Locations join(Countries@COUNTRY_ID == Locations@COUNTRY_ID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> countrylocationjoin",
+						"countrylocationjoin sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['LocationCountryDetails'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          COUNTRY_ID = Countries@COUNTRY_ID,",
+						"          COUNTRY_NAME,",
+						"          LOCATION_ID,",
+						"          CITY,",
+						"          STATE_PROVINCE",
+						"     ),",
+						"     partitionBy('hash', 1)) ~> TargetLocationdetails"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_dataflow_countries')]",
+				"[concat(variables('factoryId'), '/datasets/ip_dataflow_locations')]",
+				"[concat(variables('factoryId'), '/datasets/op_dataflow_locationCountryDetails')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_dataflow_countries')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "countries.csv",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_dataflow_locations')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "locations.csv",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "LOCATION_ID",
+						"type": "String"
+					},
+					{
+						"name": "STREET_ADDRESS",
+						"type": "String"
+					},
+					{
+						"name": "POSTAL_CODE",
+						"type": "String"
+					},
+					{
+						"name": "CITY",
+						"type": "String"
+					},
+					{
+						"name": "STATE_PROVINCE",
+						"type": "String"
+					},
+					{
+						"name": "COUNTRY_ID",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/op_dataflow_locationCountryDetails')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "output_devemp",
+						"fileSystem": "devcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/8 Dataflow locationcountry')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "1 Join Country Locations",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "1 Join Country Locations",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"Countries": {},
+									"Locations": {},
+									"TargetLocationdetails": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/1 Join Country Locations')]"
+			]
 		}
 	]
 }
