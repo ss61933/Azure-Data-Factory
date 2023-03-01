@@ -1,0 +1,58 @@
+{
+	"name": "5 Filter Array",
+	"properties": {
+		"activities": [
+			{
+				"name": "Filter1",
+				"type": "Filter",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('Array')",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@greater(item(),2 )",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Append variable2",
+				"type": "AppendVariable",
+				"dependsOn": [
+					{
+						"activity": "Filter1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "targetarray",
+					"value": {
+						"value": "@activity('Filter1').output",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"Array": {
+				"type": "Array",
+				"defaultValue": [
+					1,
+					2,
+					5,
+					6
+				]
+			},
+			"targetarray": {
+				"type": "Array"
+			}
+		},
+		"annotations": []
+	}
+}
