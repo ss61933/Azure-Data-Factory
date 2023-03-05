@@ -19,6 +19,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "opcentralregionsuperstore"
+				},
+				{
+					"dataset": {
+						"referenceName": "op_adls_aggyearwisemeasures",
+						"type": "DatasetReference"
+					},
+					"name": "opyearwisemeasures"
 				}
 			],
 			"transformations": [
@@ -107,7 +114,38 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> opcentralregionsuperstore"
+				"     skipDuplicateMapOutputs: true) ~> opcentralregionsuperstore",
+				"aggregateYearWise sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          {Row ID} as string,",
+				"          {Order ID} as string,",
+				"          {Order Date} as string,",
+				"          {Ship Date} as string,",
+				"          {Ship Mode} as string,",
+				"          {Customer ID} as string,",
+				"          {Customer Name} as string,",
+				"          Segment as string,",
+				"          {Country/Region} as string,",
+				"          City as string,",
+				"          {State/Province} as string,",
+				"          {Postal Code} as string,",
+				"          Region as string,",
+				"          {Product ID} as string,",
+				"          Category as string,",
+				"          {Sub-Category} as string,",
+				"          {Product Name} as string,",
+				"          Sales as string,",
+				"          Quantity as string,",
+				"          Discount as string,",
+				"          Profit as string,",
+				"          Regionconcat as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> opyearwisemeasures"
 			]
 		}
 	}
