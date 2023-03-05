@@ -1,0 +1,9 @@
+{
+	"name": "ExploreandlearnADF",
+	"location": "northeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "4836c1b5-24fd-4c5d-bcec-17532f6822a2",
+		"tenantId": "a950e210-497a-4adf-9b03-0a25bfcc25ce"
+	}
+}

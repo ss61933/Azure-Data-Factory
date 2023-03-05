@@ -1,0 +1,17 @@
+{
+	"name": "op_exploredb_locations",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "link_to_exploredb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "locations"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
