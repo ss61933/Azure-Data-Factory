@@ -1,0 +1,74 @@
+{
+	"name": "2_samplesuperstore_transformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ip_adls_samplesuperstore",
+						"type": "DatasetReference"
+					},
+					"name": "SamplesSperstore"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "op_adls_op_CentralRegion_Superstore",
+						"type": "DatasetReference"
+					},
+					"name": "opcentralregionsuperstore"
+				}
+			],
+			"transformations": [
+				{
+					"name": "splitRegionCentral"
+				},
+				{
+					"name": "derivedColumn"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Row ID} as string,",
+				"          {Order ID} as string,",
+				"          {Order Date} as string,",
+				"          {Ship Date} as string,",
+				"          {Ship Mode} as string,",
+				"          {Customer ID} as string,",
+				"          {Customer Name} as string,",
+				"          Segment as string,",
+				"          {Country/Region} as string,",
+				"          City as string,",
+				"          {State/Province} as string,",
+				"          {Postal Code} as string,",
+				"          Region as string,",
+				"          {Product ID} as string,",
+				"          Category as string,",
+				"          {Sub-Category} as string,",
+				"          {Product Name} as string,",
+				"          Sales as string,",
+				"          Quantity as string,",
+				"          Discount as string,",
+				"          Profit as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> SamplesSperstore",
+				"SamplesSperstore split(Region== 'Central',",
+				"     disjoint: false,",
+				"     partitionBy('hash', 1)) ~> splitRegionCentral@(CentralRegion)",
+				"splitRegionCentral@CentralRegion derive(Regionconcat = concat(Region, Category)) ~> derivedColumn",
+				"derivedColumn sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> opcentralregionsuperstore"
+			]
+		}
+	}
+}
