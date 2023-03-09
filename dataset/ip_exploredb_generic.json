@@ -1,0 +1,16 @@
+{
+	"name": "ip_exploredb_generic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "link_to_exploredb",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "InputDatasets"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

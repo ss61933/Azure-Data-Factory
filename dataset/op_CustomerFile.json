@@ -1,5 +1,5 @@
 {
-	"name": "op_adl_devempfolder",
+	"name": "op_CustomerFile",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "link_to_ADLS",
@@ -13,13 +13,16 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "output_devemp",
-				"fileSystem": "devcontainer"
+				"fileName": "op_CustomerData",
+				"folderPath": "devcustomer",
+				"fileSystem": "devlanding"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
+			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": []
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

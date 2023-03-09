@@ -1,0 +1,2456 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ExploreandlearnADF"
+		},
+		"link_to_ADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'link_to_ADLS'"
+		},
+		"link_to_exploredb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'link_to_exploredb'"
+		},
+		"link_to_ADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://exploreandlearnsgdev.dfs.core.windows.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/1 LoadCustomerPipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy Customer",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CustomerID",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 1
+										}
+									},
+									{
+										"source": {
+											"name": "NameStyle",
+											"type": "Boolean",
+											"physicalType": "bit"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 2
+										}
+									},
+									{
+										"source": {
+											"name": "Title",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 3
+										}
+									},
+									{
+										"source": {
+											"name": "FirstName",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 4
+										}
+									},
+									{
+										"source": {
+											"name": "MiddleName",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 5
+										}
+									},
+									{
+										"source": {
+											"name": "LastName",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 6
+										}
+									},
+									{
+										"source": {
+											"name": "Suffix",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 7
+										}
+									},
+									{
+										"source": {
+											"name": "CompanyName",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 8
+										}
+									},
+									{
+										"source": {
+											"name": "SalesPerson",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 9
+										}
+									},
+									{
+										"source": {
+											"name": "EmailAddress",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 10
+										}
+									},
+									{
+										"source": {
+											"name": "Phone",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 11
+										}
+									},
+									{
+										"source": {
+											"name": "PasswordHash",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 12
+										}
+									},
+									{
+										"source": {
+											"name": "PasswordSalt",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 13
+										}
+									},
+									{
+										"source": {
+											"name": "rowguid",
+											"type": "Guid",
+											"physicalType": "uniqueidentifier"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 14
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 15
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ip_exploredb_customer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "op_adl_devempfolder",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-02-23T10:18:36Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_exploredb_customer')]",
+				"[concat(variables('factoryId'), '/datasets/op_adl_devempfolder')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/2 LoadFilesInLoop')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetListOfFiles",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ip_adls_devempfolder",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEachFile",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetListOfFiles",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetListOfFiles').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Copy EachFile",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true,
+												"wildcardFolderPath": "devemp",
+												"wildcardFileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ip_ADLS_Employeefile",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "op_adl_devempfolder",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-02-27T15:11:37Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder')]",
+				"[concat(variables('factoryId'), '/datasets/ip_ADLS_Employeefile')]",
+				"[concat(variables('factoryId'), '/datasets/op_adl_devempfolder')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/3 Load tablesInLoopUsingVariables')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Mention table list in variable .\nRead \nSalesLT].[Product];\n[SalesLT].[ProductCategory];",
+				"activities": [
+					{
+						"name": "ForEachTableName",
+						"description": "Read list of tables from variable - V_table_list",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('V_table_list')",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Copy data for each table",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"sqlReaderQuery": {
+												"value": "@item()",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ip_exploredb_generic",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "op_adl_generic",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_filename": {
+													"value": "@replace(item(),'select * from SalesLT.',' ')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"V_table_list": {
+						"type": "Array",
+						"defaultValue": [
+							"select * from SalesLT.PRODUCT",
+							"select * from SalesLT.PRODUCTCATEGORY"
+						]
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-02-23T21:19:10Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_exploredb_generic')]",
+				"[concat(variables('factoryId'), '/datasets/op_adl_generic')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/4 Load tablesInLoopUsingVariables_appenddate')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Mention table list in variable .\nRead \nSalesLT].[Product];\n[SalesLT].[ProductCategory];",
+				"activities": [
+					{
+						"name": "ForEachTableName",
+						"description": "Read list of tables from variable - V_table_list",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('V_table_list')",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Copy data for each table",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"sqlReaderQuery": {
+												"value": "@item()",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ip_exploredb_generic",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "op_adl_generic",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_filename": {
+													"value": "@concat(\n        concat(\n            replace(item(),'select * from SalesLT.',' '),\n            '_'\n            )\n        , formatDateTime(utcNow(),'mm-dd-yyyy')\n)",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"V_table_list": {
+						"type": "Array",
+						"defaultValue": [
+							"select * from SalesLT.PRODUCT",
+							"select * from SalesLT.PRODUCTCATEGORY"
+						]
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-02-24T11:42:15Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_exploredb_generic')]",
+				"[concat(variables('factoryId'), '/datasets/op_adl_generic')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/5 Filter Array')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Filter1",
+						"type": "Filter",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('Array')",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@greater(item(),2 )",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Append variable2",
+						"type": "AppendVariable",
+						"dependsOn": [
+							{
+								"activity": "Filter1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "targetarray",
+							"value": {
+								"value": "@activity('Filter1').output",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"Array": {
+						"type": "Array",
+						"defaultValue": [
+							1,
+							2,
+							5,
+							6
+						]
+					},
+					"targetarray": {
+						"type": "Array"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-01T12:25:11Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/6 Web read from REST API')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Read from \nhttps://dummy.restapiexample.com/api/v1/employees",
+				"activities": [
+					{
+						"name": "Web1",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://dummy.restapiexample.com/api/v1/employees",
+							"method": "GET",
+							"headers": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-01T12:25:11Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/7 Execute stored procedure')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Execuete readEmp stored proc",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[readEmp]"
+						},
+						"linkedServiceName": {
+							"referenceName": "link_to_exploredb",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-01T12:25:10Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_exploredb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/8 Dataflow locationcountry')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "1 Join Country Locations",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "1 Join Country Locations",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"Countries": {},
+									"Locations": {},
+									"TargetLocationdetails": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-01T13:48:23Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/1 Join Country Locations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/9_Dataflow Superstore transformation')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "2_samplesuperstore_transformation",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "2_samplesuperstore_transformation",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SamplesSperstore": {},
+									"opcentralregionsuperstore": {},
+									"opyearwisemeasures": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/2_samplesuperstore_transformation')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Step1 - Switch - Delete acton')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SwitchCopyDelete",
+						"type": "Switch",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"on": {
+								"value": "@pipeline().parameters.P_case",
+								"type": "Expression"
+							},
+							"cases": [
+								{
+									"value": "Copy",
+									"activities": [
+										{
+											"name": "ExecutePipelineCopy",
+											"type": "ExecutePipeline",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"pipeline": {
+													"referenceName": "Step2 - Call Copy for all files",
+													"type": "PipelineReference"
+												},
+												"waitOnCompletion": true,
+												"parameters": {}
+											}
+										}
+									]
+								},
+								{
+									"value": "Delete",
+									"activities": [
+										{
+											"name": "Delete Files",
+											"description": "Delete all files from folder /deletefolder/",
+											"type": "Delete",
+											"dependsOn": [],
+											"policy": {
+												"timeout": "0.12:00:00",
+												"retry": 0,
+												"retryIntervalInSeconds": 30,
+												"secureOutput": false,
+												"secureInput": false
+											},
+											"userProperties": [],
+											"typeProperties": {
+												"dataset": {
+													"referenceName": "ip_adls_deletefolder",
+													"type": "DatasetReference",
+													"parameters": {}
+												},
+												"logStorageSettings": {
+													"linkedServiceName": {
+														"referenceName": "link_to_ADLS",
+														"type": "LinkedServiceReference"
+													},
+													"path": "logfolder"
+												},
+												"enableLogging": true,
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": false,
+													"enablePartitionDiscovery": false
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"P_case": {
+						"type": "string",
+						"defaultValue": "Delete"
+					}
+				},
+				"variables": {
+					"V_VariableName": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Project - Copy Upsert Delete file"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-02-27T15:32:52Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Step2 - Call Copy for all files')]",
+				"[concat(variables('factoryId'), '/datasets/ip_adls_deletefolder')]",
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Step2 - Call Copy for all files')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetListOfFiles",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ip_adls_devempfolder_all",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"exists"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "GetListOfFiles",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@activity('GetListOfFiles').output.exists",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "Decide Copy",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "Step3 - Copy or Upsert",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"FileName": {
+						"type": "String"
+					},
+					"V_VariableName": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Project - Copy Upsert Delete file"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-02-27T15:32:52Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder_all')]",
+				"[concat(variables('factoryId'), '/pipelines/Step3 - Copy or Upsert')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Step3 - Copy or Upsert')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Files list",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ip_adls_devempfolder_all",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Files list",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Files list').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "If Country else location",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "Set Filename",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@equals(item().name ,'countries.csv' )",
+											"type": "Expression"
+										},
+										"ifFalseActivities": [
+											{
+												"name": "Upsert locations",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "DelimitedTextSource",
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "DelimitedTextReadSettings"
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"writeBehavior": "upsert",
+														"upsertSettings": {
+															"useTempDB": false,
+															"keys": [
+																"LOCATION_ID"
+															],
+															"interimSchemaName": "dbo"
+														},
+														"sqlWriterUseTableLock": false,
+														"disableMetricsCollection": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"mappings": [
+															{
+																"source": {
+																	"name": "LOCATION_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "LOCATION_ID",
+																	"type": "Int32",
+																	"physicalType": "int"
+																}
+															},
+															{
+																"source": {
+																	"name": "STREET_ADDRESS",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "STREET_ADDRESS",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "POSTAL_CODE",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "POSTAL_CODE",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "CITY",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "CITY",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "STATE_PROVINCE",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "STATE_PROVINCE",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "COUNTRY_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "COUNTRY_ID",
+																	"type": "String",
+																	"physicalType": "varchar"
+																}
+															}
+														],
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ip_adls_devempfolder",
+														"type": "DatasetReference",
+														"parameters": {
+															"P_FileName": {
+																"value": "@variables('V_VariableName')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "op_exploredb_locations",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											}
+										],
+										"ifTrueActivities": [
+											{
+												"name": "Copy countries",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "DelimitedTextSource",
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "DelimitedTextReadSettings"
+														}
+													},
+													"sink": {
+														"type": "DelimitedTextSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextWriteSettings",
+															"quoteAllText": true,
+															"fileExtension": ".txt"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ip_adls_devempfolder",
+														"type": "DatasetReference",
+														"parameters": {
+															"P_FileName": {
+																"value": "@variables('V_VariableName')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "op_adl_devempfolder",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											}
+										]
+									}
+								},
+								{
+									"name": "Set Filename",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "V_VariableName",
+										"value": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"V_VariableName": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Project - Copy Upsert Delete file"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-02-27T15:32:51Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder_all')]",
+				"[concat(variables('factoryId'), '/datasets/ip_adls_devempfolder')]",
+				"[concat(variables('factoryId'), '/datasets/op_exploredb_locations')]",
+				"[concat(variables('factoryId'), '/datasets/op_adl_devempfolder')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_ADLS_Employeefile')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "InputDatasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "employees.csv",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_adls_countries')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "countries.csv",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "COUNTRY_ID",
+						"type": "String"
+					},
+					{
+						"name": "COUNTRY_NAME",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_adls_deletefolder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "deletefolder"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_adls_devempfolder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"P_FileName": {
+						"type": "string",
+						"defaultValue": "*"
+					}
+				},
+				"folder": {
+					"name": "InputDatasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().P_FileName",
+							"type": "Expression"
+						},
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_adls_devempfolder_all')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "InputDatasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_adls_samplesuperstore')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Orders",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Sample - Superstore.xls",
+						"fileSystem": "samplesuperstore"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Row ID",
+						"type": "String"
+					},
+					{
+						"name": "Order ID",
+						"type": "String"
+					},
+					{
+						"name": "Order Date",
+						"type": "String"
+					},
+					{
+						"name": "Ship Date",
+						"type": "String"
+					},
+					{
+						"name": "Ship Mode",
+						"type": "String"
+					},
+					{
+						"name": "Customer ID",
+						"type": "String"
+					},
+					{
+						"name": "Customer Name",
+						"type": "String"
+					},
+					{
+						"name": "Segment",
+						"type": "String"
+					},
+					{
+						"name": "Country/Region",
+						"type": "String"
+					},
+					{
+						"name": "City",
+						"type": "String"
+					},
+					{
+						"name": "State/Province",
+						"type": "String"
+					},
+					{
+						"name": "Postal Code",
+						"type": "String"
+					},
+					{
+						"name": "Region",
+						"type": "String"
+					},
+					{
+						"name": "Product ID",
+						"type": "String"
+					},
+					{
+						"name": "Category",
+						"type": "String"
+					},
+					{
+						"name": "Sub-Category",
+						"type": "String"
+					},
+					{
+						"name": "Product Name",
+						"type": "String"
+					},
+					{
+						"name": "Sales",
+						"type": "String"
+					},
+					{
+						"name": "Quantity",
+						"type": "String"
+					},
+					{
+						"name": "Discount",
+						"type": "String"
+					},
+					{
+						"name": "Profit",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_dataflow_countries')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "countries.csv",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_dataflow_locations')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "locations.csv",
+						"folderPath": "devemp",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "LOCATION_ID",
+						"type": "String"
+					},
+					{
+						"name": "STREET_ADDRESS",
+						"type": "String"
+					},
+					{
+						"name": "POSTAL_CODE",
+						"type": "String"
+					},
+					{
+						"name": "CITY",
+						"type": "String"
+					},
+					{
+						"name": "STATE_PROVINCE",
+						"type": "String"
+					},
+					{
+						"name": "COUNTRY_ID",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_exploredb_customer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_exploredb",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "InputDatasets"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NameStyle",
+						"type": "bit"
+					},
+					{
+						"name": "Title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FirstName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MiddleName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Suffix",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CompanyName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SalesPerson",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EmailAddress",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Phone",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PasswordHash",
+						"type": "varchar"
+					},
+					{
+						"name": "PasswordSalt",
+						"type": "varchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": "Customer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_exploredb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ip_exploredb_generic')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_exploredb",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "InputDatasets"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_exploredb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/op_CustomerFile')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "OutputDatasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "op_CustomerData",
+						"folderPath": "devcustomer",
+						"fileSystem": "devlanding"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/op_adl_devempfolder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "OutputDatasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "output_devemp",
+						"fileSystem": "devcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/op_adl_generic')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_filename": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "OutputDatasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().p_filename",
+							"type": "Expression"
+						},
+						"folderPath": "output_devemp",
+						"fileSystem": "devcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/op_adls_aggyearwisemeasures')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "samplesuperstore"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Row ID",
+						"type": "String"
+					},
+					{
+						"name": "Order ID",
+						"type": "String"
+					},
+					{
+						"name": "Order Date",
+						"type": "String"
+					},
+					{
+						"name": "Ship Date",
+						"type": "String"
+					},
+					{
+						"name": "Ship Mode",
+						"type": "String"
+					},
+					{
+						"name": "Customer ID",
+						"type": "String"
+					},
+					{
+						"name": "Customer Name",
+						"type": "String"
+					},
+					{
+						"name": "Segment",
+						"type": "String"
+					},
+					{
+						"name": "Country/Region",
+						"type": "String"
+					},
+					{
+						"name": "City",
+						"type": "String"
+					},
+					{
+						"name": "State/Province",
+						"type": "String"
+					},
+					{
+						"name": "Postal Code",
+						"type": "String"
+					},
+					{
+						"name": "Region",
+						"type": "String"
+					},
+					{
+						"name": "Product ID",
+						"type": "String"
+					},
+					{
+						"name": "Category",
+						"type": "String"
+					},
+					{
+						"name": "Sub-Category",
+						"type": "String"
+					},
+					{
+						"name": "Product Name",
+						"type": "String"
+					},
+					{
+						"name": "Sales",
+						"type": "String"
+					},
+					{
+						"name": "Quantity",
+						"type": "String"
+					},
+					{
+						"name": "Discount",
+						"type": "String"
+					},
+					{
+						"name": "Profit",
+						"type": "String"
+					},
+					{
+						"name": "Regionconcat",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/op_adls_op_CentralRegion_Superstore')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "samplesuperstore"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/op_dataflow_locationCountryDetails')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_ADLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "output_devemp",
+						"fileSystem": "devcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/op_exploredb_locations')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "link_to_exploredb",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "locations"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/link_to_exploredb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/link_to_ADLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('link_to_ADLS_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('link_to_ADLS_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/link_to_exploredb')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('link_to_exploredb_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/1 Join Country Locations')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ip_dataflow_countries",
+								"type": "DatasetReference"
+							},
+							"name": "Countries"
+						},
+						{
+							"dataset": {
+								"referenceName": "ip_dataflow_locations",
+								"type": "DatasetReference"
+							},
+							"name": "Locations"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "op_dataflow_locationCountryDetails",
+								"type": "DatasetReference"
+							},
+							"name": "TargetLocationdetails"
+						}
+					],
+					"transformations": [
+						{
+							"name": "countrylocationjoin"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          COUNTRY_ID as string,",
+						"          COUNTRY_NAME as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Countries",
+						"source(output(",
+						"          LOCATION_ID as string,",
+						"          STREET_ADDRESS as string,",
+						"          POSTAL_CODE as string,",
+						"          CITY as string,",
+						"          STATE_PROVINCE as string,",
+						"          COUNTRY_ID as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Locations",
+						"Countries, Locations join(Countries@COUNTRY_ID == Locations@COUNTRY_ID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> countrylocationjoin",
+						"countrylocationjoin sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['LocationCountryDetails'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          COUNTRY_ID = Countries@COUNTRY_ID,",
+						"          COUNTRY_NAME,",
+						"          LOCATION_ID,",
+						"          CITY,",
+						"          STATE_PROVINCE",
+						"     ),",
+						"     partitionBy('hash', 1)) ~> TargetLocationdetails"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_dataflow_countries')]",
+				"[concat(variables('factoryId'), '/datasets/ip_dataflow_locations')]",
+				"[concat(variables('factoryId'), '/datasets/op_dataflow_locationCountryDetails')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/2_samplesuperstore_transformation')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ip_adls_samplesuperstore",
+								"type": "DatasetReference"
+							},
+							"name": "SamplesSperstore"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "op_adls_op_CentralRegion_Superstore",
+								"type": "DatasetReference"
+							},
+							"name": "opcentralregionsuperstore"
+						},
+						{
+							"dataset": {
+								"referenceName": "op_adls_aggyearwisemeasures",
+								"type": "DatasetReference"
+							},
+							"name": "opyearwisemeasures"
+						}
+					],
+					"transformations": [
+						{
+							"name": "splitRegionCentral"
+						},
+						{
+							"name": "derivedColumn"
+						},
+						{
+							"name": "derivedYearOrderDate"
+						},
+						{
+							"name": "selectYearSalesProfit"
+						},
+						{
+							"name": "aggregateYearWise"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          {Row ID} as string,",
+						"          {Order ID} as string,",
+						"          {Order Date} as date,",
+						"          {Ship Date} as string,",
+						"          {Ship Mode} as string,",
+						"          {Customer ID} as string,",
+						"          {Customer Name} as string,",
+						"          Segment as string,",
+						"          {Country/Region} as string,",
+						"          City as string,",
+						"          {State/Province} as string,",
+						"          {Postal Code} as string,",
+						"          Region as string,",
+						"          {Product ID} as string,",
+						"          Category as string,",
+						"          {Sub-Category} as string,",
+						"          {Product Name} as string,",
+						"          Sales as integer,",
+						"          Quantity as string,",
+						"          Discount as string,",
+						"          Profit as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     partitionBy('hash', 1)) ~> SamplesSperstore",
+						"SamplesSperstore split(equals(Region,'Central'),",
+						"     disjoint: false,",
+						"     partitionBy('hash', 1)) ~> splitRegionCentral@(CentralRegion, OtherRegion)",
+						"splitRegionCentral@CentralRegion derive(Regionconcat = concat(Region, Category)) ~> derivedColumn",
+						"splitRegionCentral@OtherRegion derive(YearOrder = year({Order Date})) ~> derivedYearOrderDate",
+						"derivedYearOrderDate select(mapColumn(",
+						"          {Row ID},",
+						"          {Order ID},",
+						"          {Order Date},",
+						"          {Ship Date},",
+						"          {Ship Mode},",
+						"          {Customer ID},",
+						"          {Customer Name},",
+						"          Segment,",
+						"          {Country/Region},",
+						"          City,",
+						"          {State/Province},",
+						"          {Postal Code},",
+						"          Region,",
+						"          {Product ID},",
+						"          Category,",
+						"          {Sub-Category},",
+						"          {Product Name},",
+						"          Sales,",
+						"          Quantity,",
+						"          Discount,",
+						"          Profit,",
+						"          YearOrder",
+						"     ),",
+						"     partitionBy('hash', 1),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectYearSalesProfit",
+						"selectYearSalesProfit aggregate(groupBy(YearOrder),",
+						"     Sales = sum((Sales)),",
+						"          Profit = sum((Profit))) ~> aggregateYearWise",
+						"derivedColumn sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> opcentralregionsuperstore",
+						"aggregateYearWise sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          {Row ID} as string,",
+						"          {Order ID} as string,",
+						"          {Order Date} as string,",
+						"          {Ship Date} as string,",
+						"          {Ship Mode} as string,",
+						"          {Customer ID} as string,",
+						"          {Customer Name} as string,",
+						"          Segment as string,",
+						"          {Country/Region} as string,",
+						"          City as string,",
+						"          {State/Province} as string,",
+						"          {Postal Code} as string,",
+						"          Region as string,",
+						"          {Product ID} as string,",
+						"          Category as string,",
+						"          {Sub-Category} as string,",
+						"          {Product Name} as string,",
+						"          Sales as string,",
+						"          Quantity as string,",
+						"          Discount as string,",
+						"          Profit as string,",
+						"          Regionconcat as string",
+						"     ),",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> opyearwisemeasures"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ip_adls_samplesuperstore')]",
+				"[concat(variables('factoryId'), '/datasets/op_adls_op_CentralRegion_Superstore')]",
+				"[concat(variables('factoryId'), '/datasets/op_adls_aggyearwisemeasures')]"
+			]
+		}
+	]
+}

@@ -1,0 +1,94 @@
+{
+	"name": "Step1 - Switch - Delete acton",
+	"properties": {
+		"activities": [
+			{
+				"name": "SwitchCopyDelete",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@pipeline().parameters.P_case",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "Copy",
+							"activities": [
+								{
+									"name": "ExecutePipelineCopy",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "Step2 - Call Copy for all files",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true
+									}
+								}
+							]
+						},
+						{
+							"value": "Delete",
+							"activities": [
+								{
+									"name": "Delete Files",
+									"description": "Delete all files from folder /deletefolder/",
+									"type": "Delete",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "ip_adls_deletefolder",
+											"type": "DatasetReference"
+										},
+										"logStorageSettings": {
+											"linkedServiceName": {
+												"referenceName": "link_to_ADLS",
+												"type": "LinkedServiceReference"
+											},
+											"path": "logfolder"
+										},
+										"enableLogging": true,
+										"storeSettings": {
+											"type": "AzureBlobFSReadSettings",
+											"recursive": false,
+											"enablePartitionDiscovery": false
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"P_case": {
+				"type": "string",
+				"defaultValue": "Delete"
+			}
+		},
+		"variables": {
+			"V_VariableName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Project - Copy Upsert Delete file"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-02-27T15:32:52Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

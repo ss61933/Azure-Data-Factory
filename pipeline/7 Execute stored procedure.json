@@ -1,0 +1,30 @@
+{
+	"name": "7 Execute stored procedure",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execuete readEmp stored proc",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[readEmp]"
+				},
+				"linkedServiceName": {
+					"referenceName": "link_to_exploredb",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-03-01T12:25:10Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

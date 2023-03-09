@@ -1,0 +1,106 @@
+{
+	"name": "ip_adls_samplesuperstore",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "link_to_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Orders",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Sample - Superstore.xls",
+				"fileSystem": "samplesuperstore"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "Row ID",
+				"type": "String"
+			},
+			{
+				"name": "Order ID",
+				"type": "String"
+			},
+			{
+				"name": "Order Date",
+				"type": "String"
+			},
+			{
+				"name": "Ship Date",
+				"type": "String"
+			},
+			{
+				"name": "Ship Mode",
+				"type": "String"
+			},
+			{
+				"name": "Customer ID",
+				"type": "String"
+			},
+			{
+				"name": "Customer Name",
+				"type": "String"
+			},
+			{
+				"name": "Segment",
+				"type": "String"
+			},
+			{
+				"name": "Country/Region",
+				"type": "String"
+			},
+			{
+				"name": "City",
+				"type": "String"
+			},
+			{
+				"name": "State/Province",
+				"type": "String"
+			},
+			{
+				"name": "Postal Code",
+				"type": "String"
+			},
+			{
+				"name": "Region",
+				"type": "String"
+			},
+			{
+				"name": "Product ID",
+				"type": "String"
+			},
+			{
+				"name": "Category",
+				"type": "String"
+			},
+			{
+				"name": "Sub-Category",
+				"type": "String"
+			},
+			{
+				"name": "Product Name",
+				"type": "String"
+			},
+			{
+				"name": "Sales",
+				"type": "String"
+			},
+			{
+				"name": "Quantity",
+				"type": "String"
+			},
+			{
+				"name": "Discount",
+				"type": "String"
+			},
+			{
+				"name": "Profit",
+				"type": "String"
+			}
+		]
+	}
+}

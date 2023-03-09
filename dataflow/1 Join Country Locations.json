@@ -1,0 +1,79 @@
+{
+	"name": "1 Join Country Locations",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ip_dataflow_countries",
+						"type": "DatasetReference"
+					},
+					"name": "Countries"
+				},
+				{
+					"dataset": {
+						"referenceName": "ip_dataflow_locations",
+						"type": "DatasetReference"
+					},
+					"name": "Locations"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "op_dataflow_locationCountryDetails",
+						"type": "DatasetReference"
+					},
+					"name": "TargetLocationdetails"
+				}
+			],
+			"transformations": [
+				{
+					"name": "countrylocationjoin"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          COUNTRY_ID as string,",
+				"          COUNTRY_NAME as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Countries",
+				"source(output(",
+				"          LOCATION_ID as string,",
+				"          STREET_ADDRESS as string,",
+				"          POSTAL_CODE as string,",
+				"          CITY as string,",
+				"          STATE_PROVINCE as string,",
+				"          COUNTRY_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Locations",
+				"Countries, Locations join(Countries@COUNTRY_ID == Locations@COUNTRY_ID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> countrylocationjoin",
+				"countrylocationjoin sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['LocationCountryDetails'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          COUNTRY_ID = Countries@COUNTRY_ID,",
+				"          COUNTRY_NAME,",
+				"          LOCATION_ID,",
+				"          CITY,",
+				"          STATE_PROVINCE",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> TargetLocationdetails"
+			]
+		}
+	}
+}

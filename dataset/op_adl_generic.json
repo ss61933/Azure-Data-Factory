@@ -1,9 +1,14 @@
 {
-	"name": "op_adl_devempfolder",
+	"name": "op_adl_generic",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "link_to_ADLS",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_filename": {
+				"type": "string"
+			}
 		},
 		"folder": {
 			"name": "OutputDatasets"
@@ -13,13 +18,19 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().p_filename",
+					"type": "Expression"
+				},
 				"folderPath": "output_devemp",
 				"fileSystem": "devcontainer"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
+			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": []
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

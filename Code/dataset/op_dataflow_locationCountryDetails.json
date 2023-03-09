@@ -1,12 +1,9 @@
 {
-	"name": "op_adl_devempfolder",
+	"name": "op_dataflow_locationCountryDetails",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "link_to_ADLS",
 			"type": "LinkedServiceReference"
-		},
-		"folder": {
-			"name": "OutputDatasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
@@ -18,6 +15,7 @@
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
+			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": []

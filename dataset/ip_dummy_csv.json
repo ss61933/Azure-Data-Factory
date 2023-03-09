@@ -1,25 +1,36 @@
 {
-	"name": "op_adl_devempfolder",
+	"name": "ip_dummy_csv",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "link_to_ADLS",
 			"type": "LinkedServiceReference"
-		},
-		"folder": {
-			"name": "OutputDatasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "output_devemp",
-				"fileSystem": "devcontainer"
+				"fileName": "countries_edited.csv",
+				"fileSystem": "devlanding"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
+			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "COUNTRY_ID",
+				"type": "String"
+			},
+			{
+				"name": "COUNTRY_NAME",
+				"type": "String"
+			},
+			{
+				"name": "Points",
+				"type": "String"
+			}
+		]
 	}
 }

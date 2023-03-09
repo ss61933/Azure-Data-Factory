@@ -1,28 +1,16 @@
 {
-	"name": "ip_adls_devempfolder",
+	"name": "ip_dataflow_locations",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "link_to_ADLS",
 			"type": "LinkedServiceReference"
-		},
-		"parameters": {
-			"P_FileName": {
-				"type": "string",
-				"defaultValue": "*"
-			}
-		},
-		"folder": {
-			"name": "InputDatasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@dataset().P_FileName",
-					"type": "Expression"
-				},
+				"fileName": "locations.csv",
 				"folderPath": "devemp",
 				"fileSystem": "devlanding"
 			},
@@ -33,9 +21,27 @@
 		},
 		"schema": [
 			{
+				"name": "LOCATION_ID",
 				"type": "String"
 			},
 			{
+				"name": "STREET_ADDRESS",
+				"type": "String"
+			},
+			{
+				"name": "POSTAL_CODE",
+				"type": "String"
+			},
+			{
+				"name": "CITY",
+				"type": "String"
+			},
+			{
+				"name": "STATE_PROVINCE",
+				"type": "String"
+			},
+			{
+				"name": "COUNTRY_ID",
 				"type": "String"
 			}
 		]
