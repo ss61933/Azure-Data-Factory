@@ -1,0 +1,34 @@
+{
+	"name": "ip_exploredb_watermark",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "link_to_exploredb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "runid",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "pipelineid",
+				"type": "char"
+			},
+			{
+				"name": "last_date",
+				"type": "date"
+			},
+			{
+				"name": "lastrundate",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "emp_watermark"
+		}
+	}
+}
