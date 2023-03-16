@@ -249,9 +249,9 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "PipelineName",
+					"variableName": "DataFactoryName",
 					"value": {
-						"value": "@pipeline().Pipeline",
+						"value": "@pipeline().DataFactory",
 						"type": "Expression"
 					}
 				}
