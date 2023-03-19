@@ -1,0 +1,304 @@
+{
+	"name": "Logging Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "HighWaterMark",
+					"value": {
+						"value": "SELECT * FROM source.CustomerRegistrations WHERE registration_date > '@{adddays(utcnow(), -30)}'",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Create ETL log entry",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "@variables('HighWaterMark')",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ip_exploredb_generic",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "op_exploredb_NewCustomerRegistrations",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Create ETL log entry",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[logging].[usp_InsertEtlLog]",
+						"storedProcedureParameters": {
+							"ComponentName": {
+								"type": "String",
+								"value": {
+									"value": "Copy data 1",
+									"type": "Expression"
+								}
+							},
+							"Deletes": {
+								"type": "Int32",
+								"value": null
+							},
+							"DurationSeconds": {
+								"type": "Int32",
+								"value": null
+							},
+							"EndTime": {
+								"type": "DateTime",
+								"value": null
+							},
+							"ErrorMessage": {
+								"type": "String",
+								"value": null
+							},
+							"Inserts": {
+								"type": "Int32",
+								"value": null
+							},
+							"PipelineName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"StartTime": {
+								"type": "DateTime",
+								"value": {
+									"value": "@utcnow()",
+									"type": "Expression"
+								}
+							},
+							"Updates": {
+								"type": "Int32",
+								"value": null
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ip_exploredb_generic",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Update ETL log entry on success",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[logging].[usp_UpdateEtlLog]",
+					"storedProcedureParameters": {
+						"Deletes": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DurationSeconds": {
+							"value": {
+								"value": "@activity('Copy data1').output.copyDuration",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"EndTime": {
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"EtlLogId": {
+							"value": {
+								"value": "@activity('Create ETL log entry').output.firstRow.EtlLogId",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"Inserts": {
+							"value": {
+								"value": "@activity('Copy data1').output.rowsCopied",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"Updates": {
+							"value": null,
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "link_to_exploredb",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Update ETL log entry on failure",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[logging].[usp_UpdateEtlLog]",
+					"storedProcedureParameters": {
+						"Deletes": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DurationSeconds": {
+							"value": {
+								"value": "@activity('Copy data1').output.copyDuration",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"EndTime": {
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"ErrorMessage": {
+							"value": {
+								"value": "@{activity('Copy data1').output.errors[0].Message}",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"EtlLogId": {
+							"value": {
+								"value": "@activity('Create ETL log entry').output.firstRow.EtlLogId",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"Inserts": {
+							"value": null,
+							"type": "Int32"
+						},
+						"Updates": {
+							"value": null,
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "link_to_exploredb",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"variables": {
+			"HighWaterMark": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Demo"
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
