@@ -1,0 +1,16 @@
+{
+	"name": "op_exploredb_NewCustomerRegistrations",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "link_to_exploredb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "NewCustomerRegistrations"
+		}
+	}
+}
